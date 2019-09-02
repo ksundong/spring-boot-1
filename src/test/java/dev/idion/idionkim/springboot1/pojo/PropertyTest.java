@@ -17,6 +17,9 @@ public class PropertyTest {
 	@Autowired
 	FruitProperty fruitProperty;
 	
+	@Autowired
+	SeasonProperties seasonProperties;
+	
 	@Test
 	public void test() {
 		List<Fruit> fruitData = fruitProperty.getList();
@@ -29,5 +32,16 @@ public class PropertyTest {
 		
 		assertThat(fruitData.get(2).getName(), is("water melon"));
 		assertThat(fruitData.get(2).getColor(), is("green"));
+		
+		// Flexible binding
+		String seasonName = seasonProperties.getSeasonName();
+		String seasonMonth = seasonProperties.getSeasonMonth();
+		String seasonFlower = seasonProperties.getSeasonFlower();
+		String seasonWeather = seasonProperties.getSeasonWeather();
+		
+		assertThat(seasonName, is("spring"));
+		assertThat(seasonMonth, is("april"));
+		assertThat(seasonFlower, is("blossom"));
+		assertThat(seasonWeather, is("sunny"));
 	}
 }

@@ -29,3 +29,8 @@ fruit:
       color: red
     - name: water melon
       color: green
+season:
+  season-name: spring
+  season_month: april
+  seasonFlower: blossom
+  seasonweather: sunny
