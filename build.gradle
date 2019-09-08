@@ -23,4 +23,5 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok:1.18.8'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
 	compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.1.7.RELEASE'
+	runtime 'com.h2database:h2'
 }

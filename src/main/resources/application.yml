@@ -34,3 +34,10 @@ season:
   season_month: april
   seasonFlower: blossom
   seasonweather: sunny
+---
+datasource:
+  url: jdbc:h2:mem:testdb
+spring:
+  h2:
+    console:
+      enabled: true
