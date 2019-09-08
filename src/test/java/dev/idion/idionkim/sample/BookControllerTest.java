@@ -1,5 +1,6 @@
-package dev.idion.idionkim.sample.controller;
+package dev.idion.idionkim.sample;
 
+import dev.idion.idionkim.sample.controller.BookController;
 import dev.idion.idionkim.sample.domain.Book;
 import dev.idion.idionkim.sample.service.BookService;
 import org.junit.Test;
