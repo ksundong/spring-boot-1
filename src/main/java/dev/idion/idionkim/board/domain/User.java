@@ -1,11 +1,14 @@
 package dev.idion.idionkim.board.domain;
 
+import dev.idion.idionkim.board.domain.enums.SocialType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,13 +37,21 @@ public class User implements Serializable {
 	private String email;
 
 	@Column
+	private  String principal;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private SocialType socialType;
+
+	@Column
 	private LocalDateTime createdDate;
 
 	@Column
 	private LocalDateTime updatedDate;
 
 	@Builder
-	public User(String name, String password, String email, LocalDateTime createdDate, LocalDateTime updatedDate) {
+	public User(String name, String password, String email, String principal, SocialType socialType
+			   ,LocalDateTime createdDate, LocalDateTime updatedDate) {
 		this.name = name;
 		this.password = password;
 		this.email = email;
