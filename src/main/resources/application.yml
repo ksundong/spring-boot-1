@@ -34,7 +34,6 @@ kakao:
   resource:
     userInfoUri: https://kapi.kakao.com/v1/user/me
 ---
----
 spring:
   profiles: local
 server:
