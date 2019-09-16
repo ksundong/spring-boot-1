@@ -1,5 +1,6 @@
 package dev.idion.idionkim.board.controller;
 
+import dev.idion.idionkim.board.annotaion.SocialUser;
 import dev.idion.idionkim.board.domain.User;
 import dev.idion.idionkim.board.domain.enums.SocialType;
 import org.springframework.security.core.context.SecurityContextHolder;
