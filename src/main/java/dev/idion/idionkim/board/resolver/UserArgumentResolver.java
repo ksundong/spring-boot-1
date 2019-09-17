@@ -3,6 +3,7 @@ package dev.idion.idionkim.board.resolver;
 import dev.idion.idionkim.board.annotaion.SocialUser;
 import dev.idion.idionkim.board.domain.User;
 import dev.idion.idionkim.board.domain.enums.SocialType;
+import dev.idion.idionkim.board.repository.UserRepository;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -28,6 +29,8 @@ import static dev.idion.idionkim.board.domain.enums.SocialType.KAKAO;
 
 @Component
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
+
+	private UserRepository userRepository;
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
