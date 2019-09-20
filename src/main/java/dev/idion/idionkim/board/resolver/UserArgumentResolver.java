@@ -59,7 +59,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
 				setRoleIfNotSame(user, authentication, map);
 				session.setAttribute("user", user);
-			} catch (ClassCastException e) {
+			} catch (Exception e) {
 				return user;
 			}
 		}
