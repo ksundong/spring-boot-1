@@ -34,7 +34,6 @@ import static dev.idion.idionkim.board.domain.enums.SocialType.*;
 @EnableOAuth2Client
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	@Qualifier("oauth2ClientContext")
 	@Autowired
 	private OAuth2ClientContext oAuth2ClientContext;
 
