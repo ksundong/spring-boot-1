@@ -11,15 +11,10 @@ spring:
           facebook:
             client-id: clientIdTest
             client-secret: clientSecretTest
-
-kakao:
-  client:
-    # change clientId
-    clientId: clientIdTest
-    accessTokenUri: https://kauth.kakao.com/oauth/token
-    userAuthorizationUri: https://kauth.kakao.com/oauth/authorize
-  resource:
-    userInfoUri: https://kapi.kakao.com/v1/user/me
+custom:
+  oauth2:
+    kakao:
+      client-id: clientIdTest
 ---
 spring:
   profiles: local
