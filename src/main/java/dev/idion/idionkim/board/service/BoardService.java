@@ -18,18 +18,18 @@ public class BoardService {
 
 	public Page<Board> findBoardList(Pageable pageable) {
 //		1.5
-		pageable = new PageRequest(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
+//		pageable = new PageRequest(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
 //		2.0
-//		pageable = PageRequest.of
-//				(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
+		pageable = PageRequest.of
+				(pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1, pageable.getPageSize());
 		return boardRepository.findAll(pageable);
 	}
 
 	public Board findBoardByIdx(Long idx) {
 //		1.5
-		return boardRepository.findOne(idx);
+//		return boardRepository.findOne(idx);
 //		2.0
-//		return boardRepository.findById(idx).orElse(new Board());
+		return boardRepository.findById(idx).orElse(new Board());
 	}
 
 }
