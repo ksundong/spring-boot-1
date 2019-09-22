@@ -1,4 +1,5 @@
 rootProject.name = 'spring-boot-1'
 include 'demo-web'
 include 'demo-domain'
+include 'boot-rest'
 
