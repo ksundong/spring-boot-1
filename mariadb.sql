@@ -10,6 +10,8 @@ CREATE TABLE `user` (
 	`name` VARCHAR(20) NOT NULL COLLATE 'utf8mb4_unicode_520_ci',
 	`password` VARCHAR(160) NOT NULL COLLATE 'utf8mb4_unicode_520_ci',
 	`email` VARCHAR(254) NOT NULL COLLATE 'utf8mb4_unicode_520_ci',
+	`principal` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_unicode_520_ci',
+	`social_type` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_unicode_520_ci',
 	`created_date` DATETIME NOT NULL,
 	`updated_date` DATETIME NOT NULL,
 	PRIMARY KEY (`idx`)
