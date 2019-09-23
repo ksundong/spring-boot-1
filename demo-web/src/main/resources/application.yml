@@ -3,6 +3,6 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/{DBName}
     username: {Id}
     password: {Password}
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
 server:
   port: 8081
