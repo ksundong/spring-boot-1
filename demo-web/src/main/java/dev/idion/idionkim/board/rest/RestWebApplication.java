@@ -29,18 +29,6 @@ public class RestWebApplication {
 	@EnableWebSecurity
 	static class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-		@Bean
-		InMemoryUserDetailsManager userDetailsManager() {
-			User.UserBuilder commonUser = User.withUsername("commonUser");
-			User.UserBuilder tester = User.withUsername("tester");
-
-			List<UserDetails> userDetailsList = new ArrayList<>();
-			userDetailsList.add(commonUser.password("common").roles("USER").build());
-			userDetailsList.add(tester.password("test").roles("USER", "ADMIN").build());
-
-			return new InMemoryUserDetailsManager(userDetailsList);
-		}
-
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			CorsConfiguration configuration = new CorsConfiguration();
