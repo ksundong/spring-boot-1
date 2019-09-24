@@ -4,5 +4,7 @@ spring:
     username: {Id}
     password: {Password}
     driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    open-in-view: false
 server:
   port: 8081
