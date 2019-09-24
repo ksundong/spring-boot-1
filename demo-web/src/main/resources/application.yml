@@ -6,5 +6,9 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     open-in-view: false
+  devtools:
+    livereload:
+      enabled: true
+      port: 35730
 server:
   port: 8081

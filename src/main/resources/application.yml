@@ -7,6 +7,7 @@ spring:
     password: {Password}
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create
   h2:
@@ -16,6 +17,7 @@ spring:
   devtools:
     livereload:
       enabled: true
+      port: 35729
   security:
     oauth2:
       client:
