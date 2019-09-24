@@ -32,9 +32,9 @@ public class RestWebApplication {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			CorsConfiguration configuration = new CorsConfiguration();
-			configuration.addAllowedOrigin("*");
-			configuration.addAllowedMethod("*");
-			configuration.addAllowedHeader("*");
+			configuration.addAllowedOrigin(CorsConfiguration.ALL);
+			configuration.addAllowedMethod(CorsConfiguration.ALL);
+			configuration.addAllowedHeader(CorsConfiguration.ALL);
 			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 			source.registerCorsConfiguration("/**", configuration);
 
