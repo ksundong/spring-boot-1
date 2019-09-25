@@ -11,10 +11,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @SpringBootApplication
-public class RestWebApplication {
+public class DataRestApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RestWebApplication.class, args);
+		SpringApplication.run(DataRestApplication.class, args);
 	}
 
 	@Configuration
