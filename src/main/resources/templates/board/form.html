@@ -111,6 +111,9 @@
       type: "PUT",
       data: jsonData,
       contentType: "application/json",
+      headers: {
+        "Authorization": "Basic " + btoa("adminUser" + ":" + "test")
+      },
       dataType: "json",
       success: function () {
         alert('수정 성공!');
