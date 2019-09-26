@@ -1,5 +1,6 @@
 package dev.idion.idionkim.board.rest.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dev.idion.idionkim.board.rest.domain.enums.SocialType;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public class User implements Serializable {
 	private String name;
 
 	@Column
+	@JsonIgnore
 	private String password;
 
 	@Column
