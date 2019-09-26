@@ -68,7 +68,6 @@ public class Board implements Serializable {
 		this.content = board.getContent();
 		this.boardType = board.getBoardType();
 		this.updatedDate = LocalDateTime.now();
-
 	}
 
 }
