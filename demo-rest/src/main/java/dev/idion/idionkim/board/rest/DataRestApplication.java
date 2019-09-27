@@ -1,5 +1,6 @@
 package dev.idion.idionkim.board.rest;
 
+import dev.idion.idionkim.board.rest.event.BoardEventHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -56,7 +57,11 @@ public class DataRestApplication {
 					.and().cors().configurationSource(source)
 					.and().csrf().disable();
 		}
-
+	}
+	
+	@Bean
+	BoardEventHandler boardEventHandler() {
+		return new BoardEventHandler();
 	}
 
 }
