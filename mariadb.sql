@@ -38,7 +38,7 @@ COLLATE='utf8mb4_unicode_520_ci'
 ENGINE=InnoDB;
 
 -- rest_board 전용 계정 생성
-DROP USER 'restuser'@'localhost';
+DROP USER IF EXISTS 'restuser'@'localhost';
 CREATE USER 'restuser'@'localhost' IDENTIFIED BY 'gL5D9Gepy9CyP-CP';
 GRANT ALL PRIVILEGES ON rest_board.* TO 'restuser'@'localhost' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
