@@ -17,6 +17,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	<S extends Board> S save(S entity);
 
-	@RestResource
+	@RestResource(path = "query")
 	List<Board> findByTitle(@Param("title") String title);
 }
