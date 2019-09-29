@@ -2,6 +2,7 @@ package dev.idion.idionkim.board.batch.jobs;
 
 import dev.idion.idionkim.board.batch.domain.User;
 import dev.idion.idionkim.board.batch.domain.enums.UserStatus;
+import dev.idion.idionkim.board.batch.jobs.listener.InactiveIJobListener;
 import dev.idion.idionkim.board.batch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -10,13 +11,12 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -26,12 +26,17 @@ import java.util.List;
 @Configuration
 public class InactiveUserJobConfig {
 
+	private UserRepository userRepository;
+
 	private final static int CHUNK_SIZE = 15;
-	private final EntityManagerFactory entityManagerFactory;
 
 	@Bean
-	public Job inactiveUserJob(JobBuilderFactory jobBuilderFactory, Step inactiveJobStep) {
-		return jobBuilderFactory.get("inactiveUserJob").preventRestart().start(inactiveJobStep).build();
+	public Job inactiveUserJob(JobBuilderFactory jobBuilderFactory, InactiveIJobListener inactiveIJobListener, Step inactiveJobStep) {
+		return jobBuilderFactory.get("inactiveUserJob")
+				.preventRestart()
+				.listener(inactiveIJobListener)
+				.start(inactiveJobStep)
+				.build();
 	}
 
 	@Bean
@@ -65,9 +70,7 @@ public class InactiveUserJobConfig {
 		 */
 	}
 
-	private JpaItemWriter<User> inactiveUserWriter() {
-		JpaItemWriter<User> jpaItemWriter = new JpaItemWriter<>();
-		jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
-		return jpaItemWriter;
+	private ItemWriter<User> inactiveUserWriter() {
+		return ((List<? extends User> users) -> userRepository.saveAll(users));
 	}
 }
