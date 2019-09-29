@@ -1,14 +1,17 @@
 package dev.idion.idionkim.board.batch.jobs;
 
 import dev.idion.idionkim.board.batch.domain.User;
+import dev.idion.idionkim.board.batch.domain.enums.Grade;
 import dev.idion.idionkim.board.batch.domain.enums.UserStatus;
 import dev.idion.idionkim.board.batch.jobs.listener.InactiveIJobListener;
 import dev.idion.idionkim.board.batch.jobs.listener.InactiveStepListener;
 import dev.idion.idionkim.board.batch.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -28,6 +31,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Configuration
 public class InactiveUserJobConfig {
@@ -37,12 +41,23 @@ public class InactiveUserJobConfig {
 	private final static int CHUNK_SIZE = 15;
 
 	@Bean
-	public Job inactiveUserJob(JobBuilderFactory jobBuilderFactory, InactiveIJobListener inactiveIJobListener, Flow inactiveJobFlow) {
+	public Job inactiveUserJob(JobBuilderFactory jobBuilderFactory, InactiveIJobListener inactiveIJobListener, Step partitionerStep) {
 		return jobBuilderFactory.get("inactiveUserJob")
 				.preventRestart()
 				.listener(inactiveIJobListener)
-				.start(inactiveJobFlow)
-				.end()
+				.start(partitionerStep)
+				.build();
+	}
+
+	@Bean
+	@JobScope
+	public Step partitionerStep(StepBuilderFactory stepBuilderFactory, Step inactiveJobStep) {
+		return stepBuilderFactory
+				.get("partitionerStep")
+				.partitioner("partitionerStep", new InactiveUserPartitioner())
+				.gridSize(5)
+				.step(inactiveJobStep)
+				.taskExecutor(taskExecutor())
 				.build();
 	}
 
@@ -71,10 +86,12 @@ public class InactiveUserJobConfig {
 	}
 
 	@Bean(destroyMethod = "")
+	@Bean
 	@StepScope
-	public ListItemReader<User> inactiveUserReader(@Value("#{jobParameters[nowDate]}") Date nowDate, UserRepository userRepository) {
-		LocalDateTime now = LocalDateTime.ofInstant(nowDate.toInstant(), ZoneId.systemDefault());
-		List<User> inactiveUsers = userRepository.findByUpdatedDateBeforeAndStatusEquals(now.minusYears(1), UserStatus.ACTIVE);
+	public ListItemReader<User> inactiveUserReader(@Value("#{stepExecutionContext[grade]}") String grade, UserRepository userRepository) {
+		log.info(Thread.currentThread().getName());
+		List<User> inactiveUsers = userRepository.findByUpdatedDateBeforeAndStatusEquals(
+				LocalDateTime.now().minusYears(1), UserStatus.ACTIVE, Grade.valueOf(grade));
 		return new ListItemReader<>(inactiveUsers);
 	}
 
