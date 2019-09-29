@@ -2,7 +2,6 @@ package dev.idion.idionkim.board.batch.jobs;
 
 import dev.idion.idionkim.board.batch.domain.User;
 import dev.idion.idionkim.board.batch.domain.enums.UserStatus;
-import dev.idion.idionkim.board.batch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -10,7 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import javax.persistence.EntityManagerFactory;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
@@ -27,7 +25,6 @@ public class InactiveUserJobConfig {
 
 	private final static int CHUNK_SIZE = 15;
 	private final EntityManagerFactory entityManagerFactory;
-	private UserRepository userRepository;
 
 	@Bean
 	public Job inactiveUserJob(JobBuilderFactory jobBuilderFactory, Step inactiveJobStep) {
@@ -46,7 +43,7 @@ public class InactiveUserJobConfig {
 
 	@Bean(destroyMethod = "")
 	@StepScope
-	public JpaPagingItemReader<User> inactiveUserJpaReader() {
+	public JpaPagingItemReader inactiveUserJpaReader() {
 		JpaPagingItemReader jpaPagingItemReader = new JpaPagingItemReader() {
 			@Override
 			public int getPage() {
@@ -66,7 +63,7 @@ public class InactiveUserJobConfig {
 		return jpaPagingItemReader;
 	}
 
-	public ItemProcessor<User, User> inactiveUserProcessor() {
+	private ItemProcessor<User, User> inactiveUserProcessor() {
 		return User::setInactive;
 		/*
 		return new ItemProcessor<User, User>() {
@@ -79,7 +76,9 @@ public class InactiveUserJobConfig {
 		 */
 	}
 
-	public ItemWriter<User> inactiveUserWriter() {
-		return ((List<? extends User> users) -> userRepository.saveAll(users));
+	private JpaItemWriter<User> inactiveUserWriter() {
+		JpaItemWriter<User> jpaItemWriter = new JpaItemWriter<>();
+		jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
+		return jpaItemWriter;
 	}
 }
