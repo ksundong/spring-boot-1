@@ -1,8 +1,11 @@
 package dev.idion.idionkim.board.batch.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import dev.idion.idionkim.board.batch.domain.enums.Grade;
 import dev.idion.idionkim.board.batch.domain.enums.SocialType;
+import dev.idion.idionkim.board.batch.domain.enums.UserStatus;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +14,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
+@EqualsAndHashCode(of = {"idx", "email"})
 @NoArgsConstructor
 @Entity
 @Table
@@ -39,19 +43,34 @@ public class User implements Serializable {
 	private SocialType socialType;
 
 	@Column
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Grade grade;
+
+	@Column
 	private LocalDateTime createdDate;
 
 	@Column
 	private LocalDateTime updatedDate;
 
 	@Builder
-	public User(String name, String password, String email, String principal, SocialType socialType
-			, LocalDateTime createdDate, LocalDateTime updatedDate) {
+	public User(String name, String password, String email, String principal, SocialType socialType,
+	            UserStatus status, LocalDateTime createdDate, LocalDateTime updatedDate) {
 		this.name = name;
 		this.password = password;
 		this.email = email;
+		this.principal = principal;
+		this.socialType = socialType;
+		this.status = status;
 		this.createdDate = createdDate;
 		this.updatedDate = updatedDate;
 	}
 
+	public User setInactive() {
+		status = UserStatus.INACTIVE;
+		return this;
+	}
 }
