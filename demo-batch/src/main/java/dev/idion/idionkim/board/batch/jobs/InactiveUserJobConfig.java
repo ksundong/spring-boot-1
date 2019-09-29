@@ -2,7 +2,6 @@ package dev.idion.idionkim.board.batch.jobs;
 
 import dev.idion.idionkim.board.batch.domain.User;
 import dev.idion.idionkim.board.batch.domain.enums.UserStatus;
-import dev.idion.idionkim.board.batch.jobs.readers.QueueItemReader;
 import dev.idion.idionkim.board.batch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -12,6 +11,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,10 +40,10 @@ public class InactiveUserJobConfig {
 
 	@Bean
 	@StepScope
-	public QueueItemReader<User> inactiveUserReader() {
+	public ListItemReader<User> inactiveUserReader() {
 		List<User> oldUsers = userRepository.findByUpdatedDateBeforeAndStatusEquals(
 				LocalDateTime.now().minusYears(1), UserStatus.ACTIVE);
-		return new QueueItemReader<>(oldUsers);
+		return new ListItemReader<>(oldUsers);
 	}
 
 	public ItemProcessor<User, User> inactiveUserProcessor() {
