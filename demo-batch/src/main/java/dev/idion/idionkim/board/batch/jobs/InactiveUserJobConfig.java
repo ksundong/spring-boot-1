@@ -3,6 +3,7 @@ package dev.idion.idionkim.board.batch.jobs;
 import dev.idion.idionkim.board.batch.domain.User;
 import dev.idion.idionkim.board.batch.domain.enums.UserStatus;
 import dev.idion.idionkim.board.batch.jobs.listener.InactiveIJobListener;
+import dev.idion.idionkim.board.batch.jobs.listener.InactiveStepListener;
 import dev.idion.idionkim.board.batch.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -40,12 +41,13 @@ public class InactiveUserJobConfig {
 	}
 
 	@Bean
-	public Step inactiveJobStep(StepBuilderFactory stepBuilderFactory, ListItemReader<User> inactiveUserReader) {
+	public Step inactiveJobStep(StepBuilderFactory stepBuilderFactory, ListItemReader<User> inactiveUserReader, InactiveStepListener inactiveStepListener) {
 		return stepBuilderFactory.get("inactiveUserStep")
 				.<User, User>chunk(CHUNK_SIZE)
 				.reader(inactiveUserReader)
 				.processor(inactiveUserProcessor())
 				.writer(inactiveUserWriter())
+				.listener(inactiveStepListener)
 				.build();
 	}
 
