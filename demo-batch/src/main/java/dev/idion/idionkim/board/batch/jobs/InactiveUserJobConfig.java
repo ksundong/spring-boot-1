@@ -12,7 +12,6 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,7 +47,12 @@ public class InactiveUserJobConfig {
 	@Bean(destroyMethod = "")
 	@StepScope
 	public JpaPagingItemReader<User> inactiveUserJpaReader() {
-		JpaPagingItemReader<User> jpaPagingItemReader = new JpaPagingItemReader<>();
+		JpaPagingItemReader jpaPagingItemReader = new JpaPagingItemReader() {
+			@Override
+			public int getPage() {
+				return 0;
+			}
+		};
 		jpaPagingItemReader.setQueryString("select u from User as u where u.updatedDate < :updatedDate and u.status = :status");
 
 		Map<String, Object> map = new HashMap<>();
