@@ -20,6 +20,8 @@ import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -55,13 +57,16 @@ public class InactiveUserJobConfig {
 	}
 
 	@Bean
-	public Step inactiveJobStep(StepBuilderFactory stepBuilderFactory, ListItemReader<User> inactiveUserReader, InactiveStepListener inactiveStepListener) {
+	public Step inactiveJobStep(StepBuilderFactory stepBuilderFactory, ListItemReader<User> inactiveUserReader
+			, InactiveStepListener inactiveStepListener, TaskExecutor taskExecutor) {
 		return stepBuilderFactory.get("inactiveUserStep")
 				.<User, User>chunk(CHUNK_SIZE)
 				.reader(inactiveUserReader)
 				.processor(inactiveUserProcessor())
 				.writer(inactiveUserWriter())
 				.listener(inactiveStepListener)
+				.taskExecutor(taskExecutor)
+				.throttleLimit(2)
 				.build();
 	}
 
@@ -71,6 +76,11 @@ public class InactiveUserJobConfig {
 		LocalDateTime now = LocalDateTime.ofInstant(nowDate.toInstant(), ZoneId.systemDefault());
 		List<User> inactiveUsers = userRepository.findByUpdatedDateBeforeAndStatusEquals(now.minusYears(1), UserStatus.ACTIVE);
 		return new ListItemReader<>(inactiveUsers);
+	}
+
+	@Bean
+	public TaskExecutor taskExecutor() {
+		return new SimpleAsyncTaskExecutor("Batch_Task");
 	}
 
 	private ItemProcessor<User, User> inactiveUserProcessor() {
